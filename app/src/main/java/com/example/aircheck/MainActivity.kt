@@ -59,6 +59,7 @@ import com.example.aircheck.data.Location
 import com.example.aircheck.ui.theme.AirCheckTheme
 import com.example.aircheck.ui.viewmodels.LocationViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -133,7 +134,8 @@ class MainActivity : ComponentActivity() {
                 android.Manifest.permission.ACCESS_COARSE_LOCATION))
         } else {
             // some level of location permissions already granted
-            fusedLocationClient.lastLocation.addOnSuccessListener {
+            Toast.makeText(this, "Fetching your location...", Toast.LENGTH_SHORT).show()
+            fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener {
                 if (it != null) {
                     startActivity(AqiActivity.getAqiActivityIntent(this@MainActivity, it.latitude, it.longitude))
                 } else {
