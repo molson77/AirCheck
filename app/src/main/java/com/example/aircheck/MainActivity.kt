@@ -256,7 +256,8 @@ fun SearchAndHistory(
                 focusedPlaceholderColor = colorResource(id = R.color.aircheck_white),
                 unfocusedPlaceholderColor = colorResource(id = R.color.aircheck_white),
                 focusedLeadingIconColor = colorResource(id = R.color.aircheck_white),
-                unfocusedLeadingIconColor = colorResource(id = R.color.aircheck_white)
+                unfocusedLeadingIconColor = colorResource(id = R.color.aircheck_white),
+                cursorColor = colorResource(id = R.color.aircheck_white)
             ),
             textStyle = TextStyle(
                 colorResource(id = R.color.aircheck_white),
