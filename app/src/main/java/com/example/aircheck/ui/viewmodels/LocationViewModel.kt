@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.aircheck.data.Location
 import com.example.aircheck.data.LocationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -41,7 +43,9 @@ class LocationViewModel @Inject constructor(
 
     fun saveLocationToHistory(location: Location) {
         viewModelScope.launch {
-            locationRepository.insertLocation(location)
+            withContext(Dispatchers.IO) {
+                locationRepository.insertLocation(location)
+            }
         }
     }
 
@@ -67,7 +71,11 @@ class LocationViewModel @Inject constructor(
     }
 
     fun clearLocationHistory() {
-        locationRepository.deleteHistory()
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                locationRepository.deleteHistory()
+            }
+        }
     }
 
     companion object {

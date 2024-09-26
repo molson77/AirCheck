@@ -6,13 +6,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,10 +17,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +28,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -150,54 +142,23 @@ fun AqiDetails(
         modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        val density = LocalDensity.current
 
-        AnimatedVisibility(
-            visible = true,
-            enter = slideInVertically {
-                // Slide in from 40 dp from the top.
-                with(density) { -40.dp.roundToPx() }
-            } + expandVertically(
-                // Expand from the top.
-                expandFrom = Alignment.Top
-            ) + fadeIn(
-                // Fade in with the initial alpha of 0.3f.
-                initialAlpha = 0.3f
-            ),
-            exit = slideOutVertically() + shrinkVertically() + fadeOut()
-        ) {
-            StationInformation(
-                name = response.data.city.name,
-                lat = response.data.city.geo[0],
-                lng = response.data.city.geo[1],
-                Modifier.padding(horizontal = 32.dp, vertical = 26.dp)
-            )
-        }
+        StationInformation(
+            name = response.data.city.name,
+            lat = response.data.city.geo[0],
+            lng = response.data.city.geo[1],
+            Modifier.padding(horizontal = 32.dp, vertical = 26.dp)
+        )
 
-        AnimatedVisibility(
-            visible = true,
-            enter = slideInVertically {
-                // Slide in from 40 dp from the top.
-                with(density) { -40.dp.roundToPx() }
-            } + expandVertically(
-                // Expand from the top.
-                expandFrom = Alignment.Top
-            ) + fadeIn(
-                // Fade in with the initial alpha of 0.3f.
-                initialAlpha = 0.3f
-            ),
-            exit = slideOutVertically() + shrinkVertically() + fadeOut()
-        ) {
-            AqiInformation(
-                response = response,
-                descriptionData,
-                yesterdayForecastData,
-                yesterdayDescriptionData,
-                tomorrowForecastData,
-                tomorrowDescriptionData,
-                Modifier.padding(vertical = 14.dp)
-            )
-        }
+        AqiInformation(
+            response = response,
+            descriptionData,
+            yesterdayForecastData,
+            yesterdayDescriptionData,
+            tomorrowForecastData,
+            tomorrowDescriptionData,
+            Modifier.padding(vertical = 14.dp)
+        )
 
     }
 }
@@ -249,7 +210,7 @@ fun AqiInformation(
     modifier: Modifier = Modifier
 ) {
 
-    Column(
+    LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = modifier.padding(horizontal = 60.dp)
@@ -257,31 +218,37 @@ fun AqiInformation(
 
         if (yesterdayForecastData != null &&
             yesterdayDescriptionData != null) {
-            AqiForecast(
-                label = "Yesterday's AQI:",
-                forecast = yesterdayForecastData,
-                descriptionData = yesterdayDescriptionData,
-                modifier = Modifier.padding()
-            )
+            item {
+                AqiForecast(
+                    label = "Yesterday's AQI:",
+                    forecast = yesterdayForecastData,
+                    descriptionData = yesterdayDescriptionData,
+                    modifier = Modifier.padding()
+                )
+            }
         }
 
-        CurrentAqi(aqi = response.data.aqi, descriptionData = descriptionData)
+        item {
+            CurrentAqi(aqi = response.data.aqi, descriptionData = descriptionData)
+        }
 
         if (tomorrowForecastData != null &&
             tomorrowDescriptionData != null) {
-            AqiForecast(
-                label = "Tomorrow's AQI:",
-                forecast = tomorrowForecastData,
-                descriptionData = tomorrowDescriptionData,
-                modifier = Modifier.padding()
-            )
+            item {
+                AqiForecast(
+                    label = "Tomorrow's AQI:",
+                    forecast = tomorrowForecastData,
+                    descriptionData = tomorrowDescriptionData,
+                    modifier = Modifier.padding()
+                )
+            }
         }
     }
 }
 
 @Composable
 fun CurrentAqi(
-    aqi: Int,
+    aqi: String,
     descriptionData: AqiDescriptionData
 ) {
     Surface(
@@ -484,9 +451,9 @@ fun AqiDetailsPreview() {
                 response = result,
                 descriptionData = descriptionData,
                 yesterdayForecastData = yesterdayForecastData,
-                yesterdayDescriptionData = yesterdayForecastData?.let { Utils.getDescriptionDataForAqiScore(it.avg) },
+                yesterdayDescriptionData = yesterdayForecastData?.let { Utils.getDescriptionDataForAqiScore(it.avg.toString()) },
                 tomorrowForecastData = tomorrowForecastData,
-                tomorrowDescriptionData = tomorrowForecastData?.let { Utils.getDescriptionDataForAqiScore(it.avg) }
+                tomorrowDescriptionData = tomorrowForecastData?.let { Utils.getDescriptionDataForAqiScore(it.avg.toString()) }
             )
         }
     }

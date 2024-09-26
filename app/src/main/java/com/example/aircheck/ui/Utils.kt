@@ -12,53 +12,64 @@ import com.example.aircheck.data.ForecastData
 import com.example.aircheck.data.IAQI
 import com.example.aircheck.data.Measurement
 import com.example.aircheck.data.Time
+import java.lang.NumberFormatException
 
 object Utils {
 
-    fun getDescriptionDataForAqiScore(aqi: Int): AqiDescriptionData {
-        return when(aqi) {
-            in 0..50 -> {
-                AqiDescriptionData(
-                    "Good",
-                    null,
-                    R.color.aqi_good
-                )
+    fun getDescriptionDataForAqiScore(aqi: String): AqiDescriptionData {
+        val aqiNum: Int
+        return try {
+            aqiNum = aqi.toInt()
+            when(aqiNum) {
+                in 0..50 -> {
+                    AqiDescriptionData(
+                        "Good",
+                        null,
+                        R.color.aqi_good
+                    )
+                }
+                in 51..100 -> {
+                    AqiDescriptionData(
+                        "Moderate",
+                        "Active children and adults, and people with respiratory disease, such as asthma, should limit prolonged outdoor exertion.",
+                        R.color.aqi_moderate
+                    )
+                }
+                in 101..150 -> {
+                    AqiDescriptionData(
+                        "Unhealthy for Sensitive Groups",
+                        "Active children and adults, and people with respiratory disease, such as asthma, should limit prolonged outdoor exertion.",
+                        R.color.aqi_unhealthy_for_sg
+                    )
+                }
+                in 151..200 -> {
+                    AqiDescriptionData(
+                        "Unhealthy",
+                        "Active children and adults, and people with respiratory disease, such as asthma, should avoid prolonged outdoor exertion; everyone else, especially children, should limit prolonged outdoor exertion.",
+                        R.color.aqi_unhealthy
+                    )
+                }
+                in 201..300 -> {
+                    AqiDescriptionData(
+                        "Very Unhealthy",
+                        "Active children and adults, and people with respiratory disease, such as asthma, should avoid all outdoor exertion; everyone else, especially children, should limit outdoor exertion.",
+                        R.color.aqi_very_unhealthy
+                    )
+                }
+                else -> {
+                    AqiDescriptionData(
+                        "Hazardous",
+                        "Everyone should avoid all outdoor exertion.",
+                        R.color.aqi_hazardous
+                    )
+                }
             }
-            in 51..100 -> {
-                AqiDescriptionData(
-                    "Moderate",
-                    "Active children and adults, and people with respiratory disease, such as asthma, should limit prolonged outdoor exertion.",
-                    R.color.aqi_moderate
-                )
-            }
-            in 101..150 -> {
-                AqiDescriptionData(
-                    "Unhealthy for Sensitive Groups",
-                    "Active children and adults, and people with respiratory disease, such as asthma, should limit prolonged outdoor exertion.",
-                    R.color.aqi_unhealthy_for_sg
-                )
-            }
-            in 151..200 -> {
-                AqiDescriptionData(
-                    "Unhealthy",
-                    "Active children and adults, and people with respiratory disease, such as asthma, should avoid prolonged outdoor exertion; everyone else, especially children, should limit prolonged outdoor exertion.",
-                    R.color.aqi_unhealthy
-                )
-            }
-            in 201..300 -> {
-                AqiDescriptionData(
-                    "Very Unhealthy",
-                    "Active children and adults, and people with respiratory disease, such as asthma, should avoid all outdoor exertion; everyone else, especially children, should limit outdoor exertion.",
-                    R.color.aqi_very_unhealthy
-                )
-            }
-            else -> {
-                AqiDescriptionData(
-                    "Hazardous",
-                    "Everyone should avoid all outdoor exertion.",
-                    R.color.aqi_hazardous
-                )
-            }
+        } catch (e: NumberFormatException) {
+            AqiDescriptionData(
+                "Error",
+                null,
+                R.color.aqi_error
+            )
         }
     }
 
@@ -66,7 +77,7 @@ object Utils {
         return AqiSuccessResponse(
             status = "ok",
             data = Data(
-                aqi = 577,
+                aqi = "577",
                 idx = 12456,
                 attributions = listOf(
                     Attribution(

@@ -73,9 +73,9 @@ class AqiViewModel @Inject constructor(
                                         errorMessage = null,
                                         descriptionData = descriptionData,
                                         yesterdayForecastData = yesterdayForecastData,
-                                        yesterdayDescriptionData = yesterdayForecastData?.let { Utils.getDescriptionDataForAqiScore(it.avg) },
+                                        yesterdayDescriptionData = yesterdayForecastData?.let { Utils.getDescriptionDataForAqiScore(it.avg.toString()) },
                                         tomorrowForecastData = tomorrowForecastData,
-                                        tomorrowDescriptionData = tomorrowForecastData?.let { Utils.getDescriptionDataForAqiScore(it.avg) }
+                                        tomorrowDescriptionData = tomorrowForecastData?.let { Utils.getDescriptionDataForAqiScore(it.avg.toString()) }
                                     )
                                 }
                                 is AqiErrorResponse -> {

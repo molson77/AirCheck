@@ -28,7 +28,7 @@ data class AqiSuccessResponse(
 
 data class Data(
     @SerializedName("aqi")
-    val aqi: Int = 0,
+    val aqi: String = "",
     @SerializedName("idx")
     val idx: Int = 0,
     @SerializedName("attributions")

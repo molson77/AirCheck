@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -38,6 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -110,8 +114,8 @@ class MainActivity : ComponentActivity() {
                         onCurrentLocationSelected = {
                             getCurrentLocation()
                         },
-                        onSearchLocation = {
-
+                        onClearHistory = {
+                            viewModel.clearLocationHistory()
                         },
                         modifier = Modifier.fillMaxSize()
                     )
@@ -149,7 +153,7 @@ fun LandingPage(
     onLocationSelected: (Location) -> Unit,
     onSuggestionSelected: (Location) -> Unit,
     onCurrentLocationSelected: () -> Unit,
-    onSearchLocation: (String) -> Unit,
+    onClearHistory: () -> Unit,
     modifier: Modifier
 ) {
 
@@ -168,7 +172,7 @@ fun LandingPage(
             onLocationSelected = {onLocationSelected(it)},
             onSuggestionSelected = {onSuggestionSelected(it)},
             onCurrentLocationSelected = {onCurrentLocationSelected.invoke()},
-            onSearchLocation = {onSearchLocation.invoke(it)}
+            onClearHistory = {onClearHistory.invoke()}
         )
     }
 }
@@ -213,7 +217,7 @@ fun SearchAndHistory(
     onLocationSelected: (Location) -> Unit,
     onSuggestionSelected: (Location) -> Unit,
     onCurrentLocationSelected: () -> Unit,
-    onSearchLocation: (String) -> Unit,
+    onClearHistory:() -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -293,6 +297,7 @@ fun SearchAndHistory(
                         address = address,
                         onLocationSelected = {
                             onSuggestionSelected.invoke(it)
+                            query = ""
                         }
                     )
                 }
@@ -313,8 +318,39 @@ fun SearchAndHistory(
                     )
                 }
             }
+            if (locationList.isNotEmpty()) {
+                item {
+                    Button(
+                        onClick = {
+                            onClearHistory.invoke()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorResource(id = R.color.aircheck_blue),
+                        ),
+                        border = BorderStroke(1.dp, colorResource(id = R.color.aircheck_white))
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.delete),
+                                contentDescription = "Delete History",
+                                tint = colorResource(id = R.color.aircheck_white),
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Text(
+                                text = "Clear History",
+                                color = colorResource(id = R.color.aircheck_white),
+                                fontSize = TextUnit(16.0F, TextUnitType.Sp),
+                                fontWeight = FontWeight.Normal,
+                                fontFamily = FontFamily.Default
+                            )
+                        }
+                    }
+                }
+            }
         }
-
     }
 }
 
@@ -432,7 +468,13 @@ fun LocationsPreview() {
                     onLocationSelected = {},
                     onSuggestionSelected = {},
                     onCurrentLocationSelected = {},
-                    onSearchLocation = {}
+                    onClearHistory = {}
+                )
+                Text(text = "Clear History",
+                    color = colorResource(id = R.color.aircheck_white),//.copy(alpha = 0.4F),
+                    fontSize = TextUnit(16.0F, TextUnitType.Sp),
+                    fontWeight = FontWeight.Normal,
+                    fontFamily = FontFamily.Default,
                 )
             }
         }
