@@ -416,7 +416,7 @@ fun SuggestionItem(
         Text(text = address.getAddressLine(0),
             color = colorResource(id = R.color.aircheck_white),
             fontSize = TextUnit(18.0F, TextUnitType.Sp),
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Left,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.Default
         )
@@ -444,7 +444,7 @@ fun CurrentLocationItem(
         Text(text = "Current Location",
             color = colorResource(id = R.color.aircheck_white),
             fontSize = TextUnit(18.0F, TextUnitType.Sp),
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Left,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.Default
         )
@@ -476,6 +476,7 @@ fun LocationsPreview() {
                 Text(text = "Clear History",
                     color = colorResource(id = R.color.aircheck_white),//.copy(alpha = 0.4F),
                     fontSize = TextUnit(16.0F, TextUnitType.Sp),
+                    textAlign = TextAlign.Left,
                     fontWeight = FontWeight.Normal,
                     fontFamily = FontFamily.Default,
                 )
