@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="aircheck_blue">#1D7FCC</color>
+    <color name="aircheck_white">#E7E7E7</color>
+    <color name="aircheck_accent">#9DDD52</color>
+    <color name="aqi_good">#4CAF50</color>
+    <color name="aqi_moderate">#C19205</color>
+    <color name="aqi_unhealthy_for_sg">#CF7C00</color>
+    <color name="aqi_unhealthy">#F44336</color>
+    <color name="aqi_very_unhealthy">#502997</color>
+    <color name="aqi_hazardous">#720C04</color>
+</resources>

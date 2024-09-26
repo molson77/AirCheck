@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">AirCheck</string>
+    <string name="title_activity_aqi">AqiActivity</string>
+    <string name="good">Good</string>
+    <string name="moderate">Moderate</string>
+    <string name="unhealthy_for_sg">Unhealthy for Sensitive Groups</string>
+    <string name="unhealthy">Unhealthy</string>
+    <string name="very_unhealthy">Very Unhealthy</string>
+    <string name="hazardous">Hazardous</string>
+</resources>
