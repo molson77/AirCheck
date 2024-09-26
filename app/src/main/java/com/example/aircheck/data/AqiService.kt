@@ -1,6 +1,6 @@
 package com.example.aircheck.data
 
-import retrofit2.http.Body
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -19,5 +19,5 @@ interface AqiService {
         @Path("lat") lat: Double,
         @Path("lng") lng: Double,
         @Query(value = "token") token: String
-    ) : AqiResponse
+    ) : Response<AqiResponse>
 }

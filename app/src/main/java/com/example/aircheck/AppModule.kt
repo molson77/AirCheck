@@ -3,6 +3,8 @@ package com.example.aircheck
 import android.content.Context
 import android.util.Log
 import androidx.room.Room
+import com.example.aircheck.data.AqiResponse
+import com.example.aircheck.data.AqiResponseDeserializer
 import com.example.aircheck.data.AqiService
 import com.example.aircheck.data.LocationDao
 import com.example.aircheck.data.LocationDatabase
@@ -31,6 +33,7 @@ object AppModule {
     @Provides
     fun provideGson(): Gson {
         return GsonBuilder()
+            .registerTypeAdapter(AqiResponse::class.java, AqiResponseDeserializer())
             .create()
     }
 
