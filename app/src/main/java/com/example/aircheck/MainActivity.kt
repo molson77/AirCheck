@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity() {
             permissions.getOrDefault(android.Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
                 // Only approximate location access granted.
             } else -> {
-            // No location access granted.
+            Toast.makeText(this, "Location Permissions required for Current Location.", Toast.LENGTH_LONG).show()
         }
 
         }
