@@ -27,6 +27,12 @@ class AqiViewModel @Inject constructor(
 
     companion object {
         const val DATE_PATTERN = "yyyy-MM-dd"
+        const val POLLUTANT_PM25 = "pm25"
+        const val POLLUTANT_PM10 = "pm10"
+        const val POLLUTANT_O3 = "o3"
+        const val POLLUTANT_NO2 = "no2"
+        const val POLLUTANT_SO2 = "so2"
+        const val POLLUTANT_CO = "co"
     }
 
     private val _uiState = MutableStateFlow(AqiUiState())
@@ -59,13 +65,30 @@ class AqiViewModel @Inject constructor(
                             when(response.data) {
                                 is AqiSuccessResponse -> {
                                     Log.d("[AQI]", "Retrieved data for lat:$lat/lng:$lng")
+
+                                    // Adjust displayed data based on dominant pollutant
+                                    val dominantPollutant = if(response.data.data.dominentpol.isNotBlank()) {
+                                        response.data.data.dominentpol
+                                    } else {
+                                        POLLUTANT_PM25
+                                    }
+
+                                    // Read forecasts for dominant pollutant
+                                    // Forecasts for NO2, SO2, and CO are not returned from the endpoint
+                                    val forecastsForDominantPollutant = when(dominantPollutant) {
+                                        POLLUTANT_PM25 -> {response.data.data.forecast.daily.pm25}
+                                        POLLUTANT_PM10 -> {response.data.data.forecast.daily.pm10}
+                                        POLLUTANT_O3 -> {response.data.data.forecast.daily.o3}
+                                        else -> {response.data.data.forecast.daily.pm25}
+                                    }
+
                                     // Successful data retrieval
                                     val today = LocalDate.now()
                                     val yesterday = today.minusDays(1).format(DateTimeFormatter.ofPattern(DATE_PATTERN))
                                     val tomorrow = today.plusDays(1).format(DateTimeFormatter.ofPattern(DATE_PATTERN))
                                     val descriptionData = Utils.getDescriptionDataForAqiScore(response.data.data.aqi)
-                                    val yesterdayForecastData = response.data.data.forecast.daily.pm25.find { it.day == yesterday }
-                                    val tomorrowForecastData = response.data.data.forecast.daily.pm25.find { it.day == tomorrow }
+                                    val yesterdayForecastData = forecastsForDominantPollutant.find { it.day == yesterday }
+                                    val tomorrowForecastData = forecastsForDominantPollutant.find { it.day == tomorrow }
 
                                     currentState.copy(
                                         response = response.data,
