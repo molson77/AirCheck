@@ -83,6 +83,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
     implementation(libs.androidx.activity.ktx)
+    implementation(libs.osmdroid.android)
 
 }
 
